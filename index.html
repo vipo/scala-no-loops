@@ -126,6 +126,31 @@ class: center, middle
 .footnote[Viačeslav Pozdniakov]
 ---
 layout: false
+# Digression One
+.left-column[
+  ## Text
+]
+.right-column[
+First year Software Engineering students at Faculty of Mathematics and Informatics of Vilnius University first are taught:
+
+- Loops with unknown number of iterations
+
+And only after that:
+
+- Loops with known number of iterations
+]
+---
+layout: false
+# Digression One
+.left-column[
+  ## Text
+  ## Pic
+]
+.right-column[
+![Pascal](turbo-pascal.jpg)
+]
+---
+# Loops
 .left-column[
   ## While
 ]
@@ -140,6 +165,7 @@ while ( a < 20 ) {
 ```
 ]
 ---
+# Loops
 .left-column[
   ## While
   ## Do-while
@@ -155,6 +181,7 @@ do {
 ```
 ]
 ---
+# Loops
 .left-column[
   ## While
   ## Do-while
@@ -172,14 +199,15 @@ Features:
 - Are raplacable by tail recursive function
 ]
 ---
+# Loops
 .left-column[
-  ## While loop
-  ## Do-while loop
+  ## While
+  ## Do-while
   ## Are the same
-  ## For loop
+  ## For
 ]
 .right-column[
-Sample:
+Example:
 ```{.scala}
 var a = 0;
 for( a <- 1 to 10) {
@@ -188,11 +216,12 @@ for( a <- 1 to 10) {
 ```
 ]
 ---
+# Loops
 .left-column[
-  ## While loop
-  ## Do-while loop
+  ## While
+  ## Do-while
   ## Are the same
-  ## For loop
+  ## For
   ## Is different
 ]
 .right-column[
@@ -204,8 +233,55 @@ Scala Reference defines:
 
 - for takes 3 pages
 ]
+---
+# Imperative "for"
+.left-column[
+  ## Reference
+]
+.right-column[
+It is said:
+
+> A for loop
+```{.scala}
+for (p <- e) s
+```
+> is translated to
+```{.scala}
+e.foreach {case p => s}
+```
+]
+---
+# Imperative "for"
+.left-column[
+  ## Reference
+  ## Magic
+]
+.right-column[
+```{.scala}
+for (i <- 1 to 4) {
+  println(i)
+}
+```
+which actually is
+```{.scala}
+for (i <- new Range.Inclusive(1, 4, 1)) {
+  println(i)
+}
+```
+because RichInt has
+```{.scala}
+def to(end: Int): Range.Inclusive =
+  Range.inclusive(self, end)
+```
+and Range has
+```{.scala}
+def inclusive(start: Int, end: Int): Range.Inclusive =
+  new Inclusive(start, end, 1)
+```
+]
+
     </textarea>
-    <script src="http://gnab.github.io/remark/downloads/remark-latest.min.js" type="text/javascript">
+    <script src="remark-latest.min.js" type="text/javascript">
     </script>
 
     <script type="text/javascript">
