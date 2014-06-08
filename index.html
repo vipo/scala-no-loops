@@ -279,7 +279,56 @@ def inclusive(start: Int, end: Int): Range.Inclusive =
   new Inclusive(start, end, 1)
 ```
 ]
+---
+# Digression Two
+.left-column[
+  ## Text
+]
+.right-column[
+Students are suprized by two things:
 
+- List can be empty
+
+- Lists can contain not only numbers or other primitive types, but also
+  other "things" like records/structs and objects like "FireExtinguisher"
+]
+---
+# Digression Two
+.left-column[
+  ## Text
+  ## Pic
+]
+.right-column[
+![Job](job.jpg)
+]
+---
+# Imperative "for"
+.left-column[
+  ## Reference
+  ## Magic
+  ## Pffff
+]
+.right-column[
+```{.scala}
+case class FireExtinguisher(litres: Int){
+  def foreach[T](action: (String) => T) =
+    action(s"p${"ff"*litres.max(0)}"): T
+}
+```
+Usage:
+```{.scala}
+for (sound <- FireExtinguisher(-1)) println(sound)
+for (sound <- FireExtinguisher(1)) println(sound)
+for (sound <- FireExtinguisher(2)) println(sound)
+```
+Output:
+> p
+
+> pff
+
+> pffff
+
+]
     </textarea>
     <script src="remark-latest.min.js" type="text/javascript">
     </script>
