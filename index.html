@@ -318,8 +318,13 @@ case class FireExtinguisher(litres: Int){
 Usage:
 ```{.scala}
 for (sound <- FireExtinguisher(-1)) println(sound)
-for (sound <- FireExtinguisher(1)) println(sound)
-for (sound <- FireExtinguisher(2)) println(sound)
+for {
+  sound1 <- FireExtinguisher(1)
+  sound2 <- FireExtinguisher(2)
+} {
+  println(sound1)
+  println(sound2)
+}
 ```
 Output:
 ```{.txt}
@@ -328,10 +333,61 @@ pff
 pffff
 ```
 ]
+---
+# For comprehensions
+.left-column[
+  ## No magic of Map
+]
+.right-column[
+A for comprehension
+```{.scala}
+for ( p <- e ) yield exp
+```
+is translated to
+```{.scala}
+e.map { case p => exp }
+```
+Map function is well known for such code:
+```{.scala}
+List(1,2,3).map(v => v.toDouble + 1)
+Option(5).map(v => v % 2 == 0)
+```
+which is evaluated to:
+```{.scala}
+List(2.0, 3.0, 4.0)
+Some(false)
+```
+]
+---
+# For comprehensions
+.left-column[
+  ## No magic of Map
+  ## Extinguisher
+]
+.right-column[
+Map just changes a content of something
+```{.scala}
+case class Extinguisher(fireClass: FireClass, litres: Int) {
+  def map(f: FireClass => (FireClass, Double)) = {
+    val (newFireClass, multiplier) = f(fireClass)
+    Extinguisher(newFireClass, (litres * multiplier).toInt)
+  }
+}
+```
+So:
+```{.scala}
+for (fireClass <- Extinguisher(ClassA, 3))
+yield
+  if (fireClass == ClassB) (fireClass, 1)
+  else (ClassB, 1.5)
+```
+produces:
+```{.scala}
+Extinguisher(ClassB, 4)
+```
+]
     </textarea>
-    <script src="remark-latest.min.js" type="text/javascript">
-    </script>
-
+    <script src="remark-latest.min.js" type="text/javascript"></script>
     <script type="text/javascript">
       var slideshow = remark.create();
     </script>
