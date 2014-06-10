@@ -467,12 +467,11 @@ We have a big fire and we need a lot of fire extinguishers at the same time.
 Empty ones ruin a whole firefighting operation.
 ```{.scala}
 case class Extinguisher(liters: Int) {
-  def map(f: Int => Int) = new Extinguisher(f(liters))
-  def flatMap(f: Int => Extinguisher): Extinguisher = {
-    val e = f(liters)
-    if (liters != 0) e
+  def map(f: Int => Int) =
+    Extinguisher(if(liters == 0) 0 else f(liters))
+  def flatMap(f: Int => Extinguisher): Extinguisher =
+    if (liters != 0) f(liters)
     else Extinguisher(0)
-  }
 }
 ```
 So:
@@ -508,6 +507,13 @@ Extinguisher(20).flatMap(
   )
 )
 ```
+Reference:
+```{.scala}
+def map(f: Int => Int) =
+  Extinguisher(if(liters == 0) 0 else f(liters))
+def flatMap(f: Int => Extinguisher): Extinguisher =
+  if (liters != 0) f(liters)
+  else Extinguisher(0)```
 ]
 ---
 # For comprehensions
