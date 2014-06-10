@@ -467,7 +467,7 @@ We have a big fire and we need a lot of fire extinguishers at the same time.
 Empty ones ruin a whole firefighting operation.
 ```{.scala}
 case class Extinguisher(liters: Int) {
-  def map(f: Int => Int): Extinguisher = new Extinguisher(f(liters))
+  def map(f: Int => Int) = new Extinguisher(f(liters))
   def flatMap(f: Int => Extinguisher): Extinguisher = {
     val e = f(liters)
     if (liters != 0) e
@@ -484,6 +484,47 @@ for {
 } yield a + b + c
 ```
 produces ```Extinguisher(0)```
+]
+---
+# For comprehensions
+.left-column[
+  ## Magical If
+]
+.right-column[
+Reference says:
+> A generator
+```{.scala}
+p <- e
+```
+> followed by a guard ```if g``` is translated to:
+```{.scala}
+p <- e.withFilter( g )
+```
+]
+---
+# For comprehensions
+.left-column[
+  ## Magical If
+  ## Even pairs
+]
+.right-column[
+So this code:
+```{.scala}
+for {
+  a <- List(1, 2, 3, 4, 5, 6, 7)
+  b <- List(3, 4, 5, 6)
+  p <- if (a % 2 == 0 && b % 2 == 0) List((a, b)) else List()
+} yield p
+```
+can be replaced by:
+```{.scala}
+for {
+  a <- List(1, 2, 3, 4, 5, 6, 7)
+  b <- List(3, 4, 5, 6)
+  if a % 2 == 0 && b % 2 == 0
+} yield (a, b)
+```
+This shows us that value ```List()``` **is** somehow special.
 ]
     </textarea>
     <script src="remark-latest.min.js" type="text/javascript"></script>
