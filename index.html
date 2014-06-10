@@ -478,9 +478,9 @@ case class Extinguisher(liters: Int) {
 So:
 ```{.scala}
 for {
-  a <- new Extinguisher(20)
-  b <- new Extinguisher(0)
-  c <- new Extinguisher(1)
+  a <- Extinguisher(20)
+  b <- Extinguisher(0)
+  c <- Extinguisher(1)
 } yield a + b + c
 ```
 produces ```Extinguisher(0)```
@@ -488,6 +488,31 @@ produces ```Extinguisher(0)```
 ---
 # For comprehensions
 .left-column[
+  ## Decompose
+]
+.right-column[
+```{.scala}
+for {
+  a <- Extinguisher(20)
+  b <- Extinguisher(0)
+  c <- Extinguisher(1)
+} yield a + b + c
+```
+really is
+```{.scala}
+Extinguisher(20).flatMap(
+  a => Extinguisher(1).flatMap(
+    b => Extinguisher(2).map(
+      c => a + b + c
+    )
+  )
+)
+```
+]
+---
+# For comprehensions
+.left-column[
+  ## Decompose
   ## Magical If
 ]
 .right-column[
@@ -512,6 +537,7 @@ Vector(0, 3, 6, 9)
 ---
 # For comprehensions
 .left-column[
+  ## Decompose
   ## Magical If
   ## Even pairs
 ]
@@ -549,8 +575,8 @@ I am pretty sure I have mentioned a word "monad" at least for three times during
   ## Text Two
 ]
 .right-column[
-My definition of a monad for enterprise architects:
-> Monad is a design pattern in functional programming.
+Definition of a monad for enterprise architects:
+> A monad is a design pattern in functional programming.
 ]
 ---
 # Digression Three
