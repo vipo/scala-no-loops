@@ -123,7 +123,7 @@ layout: true
 class: center, middle
 ---
 # No Scala, no loops
-.footnote[Viačeslav Pozdniakov]
+.footnote[Viačeslav Pozdniakov, Adform, VU]
 ---
 layout: false
 # Digression One
@@ -249,6 +249,14 @@ for (p <- e) s
 ```{.scala}
 e.foreach {case p => s}
 ```
+> And:
+```{.scala}
+for (p1 <- e1; p2 <- e2) s
+```
+> is translated to
+```{.scala}
+e1.foreach {case p1 => for (p2 <- e2) s}
+```
 ]
 ---
 # Imperative "for"
@@ -350,6 +358,7 @@ e.map { case p => exp }
 Map function is well known for such code:
 ```{.scala}
 List(1,2,3).map(v => v.toDouble + 1)
+
 Option(5).map(v => v % 2 == 0)
 ```
 which is evaluated to:
@@ -365,7 +374,7 @@ Some(false)
   ## Extinguisher
 ]
 .right-column[
-Map just changes a content of something
+Map *can be* used to change a content of something
 ```{.scala}
 case class Extinguisher(fireClass: FireClass, litres: Int) {
   def map(f: FireClass => (FireClass, Double)) = {
@@ -384,6 +393,95 @@ yield
 produces:
 ```{.scala}
 Extinguisher(ClassB, 4)
+```
+]
+---
+# For comprehensions
+.left-column[
+  ## No magic of Map
+  ## Extinguisher
+  ## Some magic of flatMap
+]
+.right-column[
+A for comprehension
+```{.scala}
+for ( p1 <- e1; p2 <- e2 ) yield exp
+```
+is translated to
+```{.scala}
+e.flatMap { case p => for ( p2 <- e2 ) yield exp }
+```
+FlatMap is widely used when you want provide "more" data than map:
+```{.scala}
+List(10, 20, 30).flatMap(v => List(v, v+1))
+
+Some(5).flatMap(v => Some(v+1)).map(v => v+10)
+```
+which is evaluated to:
+```{.scala}
+List(10, 11, 20, 21, 30, 31)
+Some(16)
+```
+]
+---
+# For comprehensions
+.left-column[
+  ## No magic of Map
+  ## Extinguisher
+  ## Some magic of flatMap
+  ## Classical magic
+]
+.right-column[
+Calculate all pairs such that both elements are even:
+```{.scala}
+for {
+  a <- List(1, 2, 3, 4, 5, 6, 7)
+  b <- List(3, 4, 5, 6)
+  p <- if (a % 2 == 0 && b % 2 == 0) List((a, b)) else List()
+} yield p
+```
+produces:
+```{.scala}
+List((2,4), (2,6), (4,4), (4,6), (6,4), (6,6))
+```
+Handy implicit "option2Iterable" conversion allow us to achieved same result via:
+```{.scala}
+for {
+  a <- List(1,2,3,4,5,6,7)
+  b <- List(3,4,5,6)
+  p <- if (a % 2 == 0 && b % 2 == 0) Some((a, b)) else None
+} yield p
+```
+]
+---
+# For comprehensions
+.left-column[
+  ## No magic of Map
+  ## Extinguisher
+  ## Some magic of flatMap
+  ## Classical magic
+  ## Big Fire
+]
+.right-column[
+Calculate all pairs such that both elements are even:
+```{.scala}
+for {
+  a <- List(1, 2, 3, 4, 5, 6, 7)
+  b <- List(3, 4, 5, 6)
+  p <- if (a % 2 == 0 && b % 2 == 0) List((a, b)) else List()
+} yield p
+```
+produces: 
+```{.scala}
+List((2,4), (2,6), (4,4), (4,6), (6,4), (6,6))
+```
+Same result can be achieved via:
+```{.scala}
+for {
+  a <- List(1,2,3,4,5,6,7)
+  b <- List(3,4,5,6)
+  p <- if (a % 2 == 0 && b % 2 == 0) Some((a, b)) else None
+} yield p
 ```
 ]
     </textarea>
