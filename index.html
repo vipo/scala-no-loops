@@ -500,6 +500,14 @@ p <- e
 ```{.scala}
 p <- e.withFilter( g )
 ```
+This code:
+```{.scala}
+for (i <- 0 to 10 if i % 3 == 0) yield i
+```
+produces
+```{.scala}
+Vector(0, 3, 6, 9)
+```
 ]
 ---
 # For comprehensions
@@ -526,6 +534,92 @@ for {
 ```
 This shows us that value ```List()``` **is** somehow special.
 ]
+---
+# Digression Three
+.left-column[
+  ## Text
+]
+.right-column[
+I am pretty sure I have mentioned a word "monad" at least for three times during this talk :)
+]
+---
+# Digression Three
+.left-column[
+  ## Text
+  ## Text Two
+]
+.right-column[
+My definition of a monad for enterprise architects:
+> Monad is a design pattern in functional programming.
+]
+---
+# Digression Three
+.left-column[
+  ## Text
+  ## Text Two
+  ## Pic
+]
+.right-column[
+![Monad](monad.jpg)
+]
+---
+# Monad
+.left-column[
+  ## Operation
+]
+.right-column[
+It has a single operation, like:
+
+- Concatination of lists
+
+- Operations with Optional values
+
+- Composing Futures
+
+- Composing fire extinguisher into a huge one
+]
+---
+# Monad
+.left-column[
+  ## Operation
+  ## A zero
+]
+.right-column[
+It has a "zero" - a special value which acts like an "empty" or "terminating" thing:
+
+- Empty list
+
+- None for Option
+
+- Failure for Future
+
+- Empty fire extinguisher
+]
+---
+# Monad
+.left-column[
+  ## Operation
+  ## A zero
+  ## Intuition
+]
+.right-column[
+If you feel you:
+
+- Have a single business rule in a domain representing class which can produce
+a new instance of the class given an old one's data
+
+- Have a special value of this class which acts like a zero in math
+
+- Hava a code which correctly works within _for_ expression 
+
+then with a very high **probability** you have created a monad.
+]
+---
+layout: true
+class: center, middle
+
+# Thank you!
+---
     </textarea>
     <script src="remark-latest.min.js" type="text/javascript"></script>
     <script type="text/javascript">
