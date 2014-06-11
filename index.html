@@ -124,6 +124,16 @@ class: center, middle
 ---
 # No Scala, no loops
 .footnote[Viačeslav Pozdniakov, Adform, VU]
+
+???
+
+Scala programmer at Aadform, not dot net.
+
+Also a lecturer at VU trying to push functional programming.
+
+Intuition about monad.
+
+No loops in Scala.
 ---
 layout: false
 # Digression One
@@ -139,6 +149,12 @@ And only after that:
 
 - Loops with known number of iterations
 ]
+
+???
+
+Why? It always seemed to me that for loops are much easier because they are safier.
+
+Maybe problem is in tooling?
 ---
 layout: false
 # Digression One
@@ -149,9 +165,28 @@ layout: false
 .right-column[
 ![Pascal](turbo-pascal.jpg)
 ]
+
+???
+
+But no!
 ---
 # Loops
 .left-column[
+  ## Reference
+]
+.right-column[
+Scala Reference defines:
+
+- while in 7 lines of text
+
+- do-while in 5 lines
+
+- for takes 3 pages
+]
+---
+# Loops
+.left-column[
+  ## Reference
   ## While
 ]
 .right-column[
@@ -167,6 +202,7 @@ while ( a < 20 ) {
 ---
 # Loops
 .left-column[
+  ## Reference
   ## While
   ## Do-while
 ]
@@ -183,6 +219,7 @@ do {
 ---
 # Loops
 .left-column[
+  ## Reference
   ## While
   ## Do-while
   ## Are the same
@@ -201,6 +238,7 @@ Features:
 ---
 # Loops
 .left-column[
+  ## Reference
   ## While
   ## Do-while
   ## Are the same
@@ -214,24 +252,6 @@ for( a <- 1 to 10) {
   println ( "Value of a: " + a );
 }
 ```
-]
----
-# Loops
-.left-column[
-  ## While
-  ## Do-while
-  ## Are the same
-  ## For
-  ## Is different
-]
-.right-column[
-Scala Reference defines:
-
-- while in 7 lines of text
-
-- do-while in 5 lines
-
-- for takes 3 pages
 ]
 ---
 # Imperative "for"
@@ -309,6 +329,10 @@ Students are suprized by two things:
 .right-column[
 ![Job](job.jpg)
 ]
+
+???
+
+Knowing these two things is quite enough to become a hibernate guru.
 ---
 # Imperative "for"
 .left-column[
@@ -341,6 +365,11 @@ pff
 pffff
 ```
 ]
+
+???
+
+You can return not only Unit, but also Int or any other type.
+
 ---
 # For comprehensions
 .left-column[
@@ -367,6 +396,13 @@ List(2.0, 3.0, 4.0)
 Some(false)
 ```
 ]
+
+???
+
+It is kind of natural that mapping over an Option generates for us a new Option, not List
+
+It is natural but not mandatory!
+
 ---
 # For comprehensions
 .left-column[
@@ -374,8 +410,12 @@ Some(false)
   ## Extinguisher
 ]
 .right-column[
-Map *can be* used to change a content of something
+Map *can be* used to change a "content" of something
 ```{.scala}
+sealed trait FireClass
+case object ClassA extends FireClass
+case object ClassB extends FireClass
+
 case class Extinguisher(fireClass: FireClass, liters: Int) {
   def map(f: FireClass => (FireClass, Double)) = {
     val (newFireClass, multiplier) = f(fireClass)
@@ -395,6 +435,10 @@ produces:
 Extinguisher(ClassB, 4)
 ```
 ]
+
+???
+
+Not so obvious thing to map over
 ---
 # For comprehensions
 .left-column[
@@ -423,6 +467,12 @@ List(10, 11, 20, 21, 30, 31)
 Some(16)
 ```
 ]
+
+???
+
+Not a single arrow in for expression
+
+All are flatmaps and last one is map
 ---
 # For comprehensions
 .left-column[
@@ -453,6 +503,14 @@ for {
 } yield p
 ```
 ]
+
+???
+
+a, b and p are generators
+
+Branching
+
+Some is a List with single value...
 ---
 # For comprehensions
 .left-column[
@@ -493,8 +551,8 @@ produces ```Extinguisher(0)```
 ```{.scala}
 for {
   a <- Extinguisher(20)
-  b <- Extinguisher(0)
-  c <- Extinguisher(1)
+  b <- Extinguisher(1)
+  c <- Extinguisher(2)
 } yield a + b + c
 ```
 really is
@@ -515,6 +573,10 @@ def flatMap(f: Int => Extinguisher): Extinguisher =
   if (liters != 0) f(liters)
   else Extinguisher(0)```
 ]
+
+???
+
+All are flat maps and the last one is map.
 ---
 # For comprehensions
 .left-column[
@@ -540,6 +602,10 @@ produces
 Vector(0, 3, 6, 9)
 ```
 ]
+
+???
+
+withFilter can be replaced by filter
 ---
 # For comprehensions
 .left-column[
@@ -566,6 +632,11 @@ for {
 ```
 This shows us that value ```List()``` **is** somehow special.
 ]
+
+???
+
+failing branch
+
 ---
 # Digression Three
 .left-column[
@@ -595,12 +666,12 @@ Definition of a monad for enterprise architects:
 ![Monad](monad.jpg)
 ]
 ---
-# Monad
+# A monad as a monoid
 .left-column[
   ## Operation
 ]
 .right-column[
-It has a single operation, like:
+It has a single operation with a hidden business rules, like:
 
 - Concatination of lists
 
@@ -611,7 +682,7 @@ It has a single operation, like:
 - Composing fire extinguisher into a huge one
 ]
 ---
-# Monad
+# A monad as a monoid
 .left-column[
   ## Operation
   ## A zero
@@ -628,7 +699,7 @@ It has a "zero" - a special value which acts like an "empty" or "terminating" th
 - Empty fire extinguisher
 ]
 ---
-# Monad
+# A monad as a monoid
 .left-column[
   ## Operation
   ## A zero
@@ -642,15 +713,21 @@ a new instance of the class given an old one's data
 
 - Have a special value of this class which acts like a zero in math
 
-- Hava a code which correctly works within _for_ expression 
+- Hava a code which correctly works within _for_ expression
 
-then with a very high **probability** you have created a monad.
+then **probably** you have created a monad. Congrats!
 ]
+
+???
+
+It still needs to be proved.
 ---
 layout: true
 class: center, middle
 
 # Thank you!
+
+github.com/vipo/scala-no-loops
 ---
     </textarea>
     <script src="remark-latest.min.js" type="text/javascript"></script>
